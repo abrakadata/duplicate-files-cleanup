@@ -76,8 +76,21 @@ To modify the interface:
    streamlit run fclones_ui.py
    ```
 
+## Best Practices
+
+We maintain a comprehensive set of best practices in [BEST_PRACTICES.md](BEST_PRACTICES.md). This document covers:
+
+- Code Quality Guidelines
+- Data Handling Standards
+- Configuration Management
+- Git and Command Line Usage
+- Environment-specific Considerations
+
+Please review these guidelines before contributing to the project.
+
 ## Recent Changes
 
+- Added best practices documentation
 - Simplified hash algorithm to use only SHA256 for better security and consistency
 - Improved session state management
 - Enhanced error handling and logging
