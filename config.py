@@ -93,35 +93,35 @@ SENSITIVE_DIRS = {
 # CSS Styles
 CSS_STYLES = """
 <style>
-    /* Main container adjustments */
+    /* Remove top padding from main container */
     .main > div:first-child {
-        padding-top: 0;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
     
     .main .block-container {
-        padding-top: 0;
-        padding-bottom: 1rem;
-    }
-    
-    /* Header styling */
-    .stApp header {
-        background-color: transparent;
-        margin-bottom: 0;
-        padding: 0;
-    }
-    
-    h1 {
-        margin-top: 0 !important;
         padding-top: 0 !important;
-        margin-bottom: 0.5rem !important;
+        margin-top: 0 !important;
     }
 
-    /* Title description spacing */
-    .stMarkdown p {
-        margin-bottom: 1rem;
+    /* Hide the header completely */
+    .stApp header {
+        display: none !important;
     }
 
-    /* Custom tab styling */
+    /* Title specific adjustments */
+    h1:first-child {
+        margin-top: -1rem !important;
+        padding-top: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Button adjustments */
+    button[kind="primary"], button[kind="secondary"] {
+        margin-top: 1rem !important;
+    }
+
+    /* Keep other styles unchanged */
     .stTabs [data-baseweb="tab-list"] {
         gap: 2rem;
     }

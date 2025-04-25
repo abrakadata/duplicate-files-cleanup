@@ -161,7 +161,7 @@ CLOUD_WARNINGS: Dict[str, str] = {
 # Page config
 st.set_page_config(
     page_title="Duplicate Files Cleanup Utility",
-    page_icon="🔍",
+    page_icon=None,
     layout="wide"
 )
 
@@ -557,10 +557,10 @@ def select_directory() -> Optional[str]:
         st.error("Failed to open folder selection dialog")
 
 # Title and description
-st.title("🔍 Duplicate Files Cleanup Utility")
+st.title("Duplicate Files Cleanup Utility")
 
 # Main content area with larger tabs
-tab1, tab2 = st.tabs(["🔍  SCAN", "📋  RESULTS"])
+tab1, tab2 = st.tabs(["SCAN", "RESULTS"])
 
 # Sidebar for displaying selected path
 with st.sidebar:
@@ -605,7 +605,7 @@ with tab1:
                 if cloud_service:
                     warning_container = st.empty()
                     warning_text = CloudStorage.get_warning(st.session_state.scan_dir)
-                    warning_container.warning(f"⚠️ You've selected a {cloud_service.replace('_', ' ').title()} folder. Please note:{warning_text}")
+                    warning_container.warning(f"You've selected a {cloud_service.replace('_', ' ').title()} folder. Please note:{warning_text}")
                     
                     col1, col2, col3 = st.columns([6, 2, 6])
                     with col2:
@@ -655,13 +655,13 @@ with tab2:
         total_groups = len(st.session_state.duplicate_files)
         total_duplicates = sum(len(group) - 1 for group in st.session_state.duplicate_files)
         
-        st.markdown(f"""
+        st.markdown("""
         ### Summary
-        - Found {total_groups} groups of duplicate files
-        - Total duplicate files: {total_duplicates}
-        - Selected for deletion: {len(st.session_state.selected_files)} files
-        - Potential space savings: {st.session_state.space_savings / (1024*1024):.2f} MB
-        """)
+        - Found {} groups of duplicate files
+        - Total duplicate files: {}
+        - Selected for deletion: {} files
+        - Potential space savings: {:.2f} MB
+        """.format(total_groups, total_duplicates, len(st.session_state.selected_files), st.session_state.space_savings / (1024*1024)))
         
         # Add buttons for selection and deletion
         col1, col2, col3, col4 = st.columns([1, 1, 1, 3])
@@ -690,16 +690,14 @@ with tab2:
                     if st.session_state.get('confirm_delete', False):
                         deleted_count, errors = delete_selected_files()
                         if deleted_count > 0:
-                            st.success(f"Successfully deleted {deleted_count} files!")
+                            st.success(f"Successfully deleted {deleted_count} files.")
                         if errors:
                             st.error("Errors occurred during deletion:\n" + "\n".join(errors))
-                        # Reset confirmation state
                         st.session_state.confirm_delete = False
-                        # Refresh the page
                         st.rerun()
                     else:
                         st.session_state.confirm_delete = True
-                        st.warning(f"⚠️ Are you sure you want to delete {len(st.session_state.selected_files)} files? Click 'Delete Selected' again to confirm.")
+                        st.warning(f"Are you sure you want to delete {len(st.session_state.selected_files)} files? Click 'Delete Selected' again to confirm.")
             else:
                 st.button("Delete Selected", key=BUTTON_KEYS['DELETE_SELECTED_DISABLED'], disabled=True, help="Select files to delete first")
         
@@ -730,7 +728,7 @@ with tab2:
                     
                     # Create a checkbox for each file
                     if st.checkbox(
-                        f"{file_path}\n📅 {time_str} | 💾 {file_size:.1f} KB",
+                        f"{file_path}\nModified: {time_str} | Size: {file_size:.1f} KB",
                         value=is_selected,
                         key=f"check_{hash(file_path)}",
                         help="Select for deletion"
