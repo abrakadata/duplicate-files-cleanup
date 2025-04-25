@@ -56,4 +56,8 @@ ehthumbs.db
 Desktop.ini
 
 # Test files
-test_duplicates/ 
+test_duplicates/
+
+# Git command best practices
+# Always use --no-pager for git commands that might trigger a pager
+# Example: git --no-pager log, git --no-pager diff 
