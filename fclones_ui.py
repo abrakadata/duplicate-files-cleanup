@@ -713,7 +713,7 @@ with tab2:
         
         for i, group in enumerate(valid_groups, 1):
             # Get file times for the group
-            file_times = [(f, FileOperations.get_file_info(f)['modified']) for f in group]
+            file_times = [(f, FileOperations.get_file_info(f).modified) for f in group]
             # Sort by timestamp (oldest first)
             file_times.sort(key=lambda x: x[1])
             
