@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duplicate Files Cleanup Utility - Instructions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .note {
+            background-color: #e7f4ff;
+            padding: 10px;
+            border-left: 4px solid #2196F3;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #fff3e0;
+            padding: 10px;
+            border-left: 4px solid #FF9800;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Duplicate Files Cleanup Utility - Instructions</h1>
+    
+    <h2>Getting Started</h2>
+    <p>This utility helps you find and manage duplicate files in your system. It's powered by fclones, a high-performance duplicate file finder.</p>
+
+    <h2>Installation</h2>
+    <h3>Windows</h3>
+    <ol>
+        <li>Install Rust (if not already installed):
+            <code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code>
+        </li>
+        <li>Install fclones:
+            <code>cargo install fclones</code>
+        </li>
+    </ol>
+
+    <h3>Linux</h3>
+    <code>cargo install fclones</code>
+
+    <h3>macOS</h3>
+    <code>brew install fclones</code>
+
+    <h2>Using the Interface</h2>
+    
+    <h3>1. Select Directory</h3>
+    <p>Choose the directory you want to scan for duplicates. You can enter the path manually or use the file picker.</p>
+    
+    <h3>2. Configure Scan</h3>
+    <ul>
+        <li><strong>Hashing Algorithm:</strong> Choose the algorithm for file comparison
+            <ul>
+                <li><code>md5</code>: Fastest, good for general use</li>
+                <li><code>sha1</code>: More secure, slightly slower</li>
+                <li><code>sha256</code>: Most secure, slower</li>
+                <li><code>xxhash</code>: Extremely fast, less secure</li>
+                <li><code>blake3</code>: Fast and secure</li>
+            </ul>
+        </li>
+        <li><strong>Size Limits:</strong> Set minimum and maximum file sizes to scan
+            <ul>
+                <li>Use suffixes: K (kilobytes), M (megabytes), G (gigabytes)</li>
+                <li>Example: 1M, 100K, 1G</li>
+            </ul>
+        </li>
+        <li><strong>Threads:</strong> Number of parallel processing threads</li>
+    </ul>
+
+    <h3>3. Advanced Options</h3>
+    <ul>
+        <li><strong>Exclude Pattern:</strong> Skip files matching the pattern
+            <ul>
+                <li>Example: <code>*.git</code> to exclude Git directories</li>
+                <li>Example: <code>*.tmp</code> to exclude temporary files</li>
+            </ul>
+        </li>
+        <li><strong>Output Format:</strong> Choose how to view results
+            <ul>
+                <li><code>text</code>: Simple text output</li>
+                <li><code>json</code>: Structured JSON data</li>
+                <li><code>csv</code>: Tabular format for spreadsheet import</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>4. Running the Scan</h3>
+    <ol>
+        <li>Click "Start Scan" to begin</li>
+        <li>Wait for the scan to complete</li>
+        <li>Review the results in the "Results" tab</li>
+    </ol>
+
+    <div class="note">
+        <h3>Tips for Best Results</h3>
+        <ul>
+            <li>Start with smaller directories to test the configuration</li>
+            <li>Use faster algorithms (md5 or xxhash) for initial scans</li>
+            <li>Adjust thread count based on your system's capabilities</li>
+            <li>Use size limits to focus on important files</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <h3>Important Notes</h3>
+        <ul>
+            <li>Always review results before taking any action</li>
+            <li>System directories are protected by default</li>
+            <li>Large scans may take significant time and resources</li>
+            <li>Keep backups of important files</li>
+        </ul>
+    </div>
+
+    <h2>Troubleshooting</h2>
+    <ul>
+        <li><strong>Scan fails:</strong> Check if fclones is properly installed</li>
+        <li><strong>Permission errors:</strong> Run with appropriate permissions</li>
+        <li><strong>Memory issues:</strong> Reduce thread count or scan size</li>
+    </ul>
+
+    <h2>Need Help?</h2>
+    <p>For more information about fclones, visit the <a href="https://github.com/pkolaczk/fclones">GitHub repository</a>.</p>
+</body>
+</html> 

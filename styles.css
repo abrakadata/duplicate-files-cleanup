@@ -1,0 +1,92 @@
+/* Main container adjustments */
+.main > div:first-child {
+    padding-top: 1rem;
+}
+
+.main .block-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Header styling */
+.stApp header {
+    background-color: transparent;
+    margin-bottom: 0;
+}
+
+h1 {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Tab styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 32px;
+    margin-bottom: 20px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    height: 80px;
+    white-space: pre;
+    font-size: 96px !important;
+    color: var(--tab-color, #4287f5);
+    padding: 10px 0;
+}
+
+.stTabs [aria-selected="true"] {
+    color: var(--tab-active-color, #66b3ff);
+    font-weight: bold;
+}
+
+/* Button styling */
+.stButton button {
+    background-color: var(--button-bg, #28a745) !important;
+    color: white !important;
+    border: 1px solid var(--button-border, #28a745) !important;
+    border-radius: 4px;
+    padding: 4px 24px;
+    min-width: 120px;
+    transition: all 0.2s ease;
+}
+
+.stButton button:hover {
+    background-color: var(--button-hover-bg, #218838) !important;
+    border-color: var(--button-hover-border, #1e7e34) !important;
+}
+
+/* Message styling */
+div[data-baseweb="message-default"] {
+    background-color: #172B4D !important;
+    border: none !important;
+}
+
+div[data-baseweb="message-default"] div {
+    color: white !important;
+}
+
+div[data-baseweb="message-default"] svg {
+    fill: white !important;
+}
+
+/* Info message styling */
+.stInfo {
+    background-color: #172B4D !important;
+    color: white !important;
+    border: none !important;
+    padding: 1rem !important;
+}
+
+.stInfo > div {
+    background-color: inherit !important;
+}
+
+.stInfo *, .stInfo svg {
+    color: white !important;
+    fill: white !important;
+}
+
+/* Make sure the message text is clearly visible */
+.stInfo p, .stInfo div[data-testid="stMarkdownContainer"] {
+    color: white !important;
+    opacity: 1 !important;
+} 

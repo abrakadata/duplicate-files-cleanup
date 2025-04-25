@@ -1,0 +1,59 @@
+# Environment variables
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+build_errors.log
+
+# Local development
+*.sqlite
+*.db
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Windows
+ehthumbs.db
+Desktop.ini
+
+# Test files
+test_duplicates/ 
