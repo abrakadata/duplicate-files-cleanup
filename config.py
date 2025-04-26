@@ -93,6 +93,11 @@ SENSITIVE_DIRS = {
 # CSS Styles
 CSS_STYLES = """
 <style>
+    /* Global container adjustments */
+    .stApp {
+        margin-top: -4rem !important;
+    }
+
     /* Remove top padding from main container */
     .main > div:first-child {
         padding-top: 0 !important;
@@ -104,6 +109,25 @@ CSS_STYLES = """
         margin-top: 0 !important;
     }
 
+    /* Sidebar adjustments */
+    [data-testid="stSidebar"] {
+        padding-top: 1.7rem !important;
+    }
+
+    [data-testid="stSidebar"] > div {
+        padding-top: 1.7rem !important;
+    }
+
+    [data-testid="stSidebarNav"] {
+        padding-top: 1.7rem !important;
+    }
+
+    /* Sidebar content container */
+    [data-testid="stSidebar"] .block-container {
+        padding-top: 1.7rem !important;
+        margin-top: 0 !important;
+    }
+
     /* Hide the header completely */
     .stApp header {
         display: none !important;
@@ -111,14 +135,27 @@ CSS_STYLES = """
 
     /* Title specific adjustments */
     h1:first-child {
-        margin-top: -1rem !important;
+        margin-top: 0 !important;
         padding-top: 0 !important;
         line-height: 1.2 !important;
     }
 
+    /* Scan section spacing */
+    .scan-buttons-container {
+        margin-top: 2rem !important;
+    }
+
+    /* Sidebar header adjustments */
+    [data-testid="stSidebar"] h1, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3 {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
     /* Button adjustments */
     button[kind="primary"], button[kind="secondary"] {
-        margin-top: 1rem !important;
+        margin-top: 0.5rem !important;
     }
 
     /* Keep other styles unchanged */
@@ -172,11 +209,44 @@ CSS_STYLES = """
 
     /* Warning text styling */
     .warning-text {
-        line-height: 1.5;
-        padding: 1rem;
+        line-height: 1.2;
+        padding: 0.8rem;
         background-color: transparent;
-        border-left: 5px solid #ffc107;
-        margin: 1rem 0;
+        border-left: 3px solid #ffc107;
+        margin: 0.4rem 0;
+    }
+
+    .warning-text h3 {
+        font-size: 1.2rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .warning-text ul {
+        margin: 0.3rem 0 !important;
+        padding-left: 1.2rem !important;
+    }
+
+    .warning-text li {
+        font-size: 0.9rem !important;
+        margin: 0.2rem 0 !important;
+    }
+
+    /* Footer section spacing */
+    .footer-container {
+        margin-top: auto !important;
+        padding-top: 4rem !important;
+    }
+
+    .stMarkdown {
+        margin-top: 0 !important;
+    }
+
+    hr + div.warning-text {
+        margin-top: 0.2rem !important;
+    }
+
+    div.warning-text + .stMarkdown {
+        margin-top: 0.4rem !important;
     }
 </style>
 """

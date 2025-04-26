@@ -700,6 +700,7 @@ with tab1:
             key="dir_display"
         )
         
+        st.markdown('<div class="scan-buttons-container">', unsafe_allow_html=True)
         col1, col2, col3 = st.columns([1, 1, 4])
         with col1:
             if st.button("Change folder", type="primary", key=BUTTON_KEYS['SELECT_PATH']):
@@ -736,7 +737,9 @@ with tab1:
                         find_duplicates(st.session_state.scan_dir)
                     except Exception as e:
                         st.error(f"Error during scan: {str(e)}")
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
+        st.markdown('<div class="scan-buttons-container">', unsafe_allow_html=True)
         col1, col2, col3 = st.columns([1, 1, 4])
         with col1:
             if st.button("Select folder", type="primary", key=BUTTON_KEYS['SELECT_PATH']):
@@ -745,6 +748,7 @@ with tab1:
             st.empty()
         with col3:
             st.empty()
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # Display results
 with tab2:
@@ -870,20 +874,23 @@ with tab2:
         st.info("Run a scan to see results here")
 
 # Footer with warning
+st.markdown('<div class="footer-container">', unsafe_allow_html=True)
 st.markdown("---")
 st.markdown("""
 <div class="warning-text">
 <h3>⚠️ Important Notes about Cloud Storage</h3>
-
-For all cloud storage services (OneDrive, Dropbox, Google Drive):
-- Files must be downloaded locally before they can be scanned for duplicates
-- Deleting files from cloud storage folders affects both local and cloud copies
-- Changes will sync across all your connected devices
-- Consider moving files to a local folder before deletion to prevent unintended synchronization
+<p>For all cloud storage services (OneDrive, Dropbox, Google Drive):</p>
+<ul>
+<li>Files must be downloaded locally before they can be scanned for duplicates</li>
+<li>Deleting files from cloud storage folders affects both local and cloud copies</li>
+<li>Changes will sync across all your connected devices</li>
+<li>Consider moving files to a local folder before deletion to prevent unintended synchronization</li>
+</ul>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 ### About
 This utility helps you find and manage duplicate files in your system.
-""") 
+""")
+st.markdown('</div>', unsafe_allow_html=True) 
