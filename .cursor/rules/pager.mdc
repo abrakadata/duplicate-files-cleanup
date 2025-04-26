@@ -1,0 +1,6 @@
+---
+description: Terminal commands
+globs: 
+alwaysApply: false
+---
+Always use git commands in the format git --no-pager <subcommand> [...] to avoid the error 'q' is not recognized as an internal or external command, operable program or batch file.
