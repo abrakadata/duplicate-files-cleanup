@@ -4,14 +4,12 @@ import hashlib
 from pathlib import Path
 import logging
 from logging.handlers import RotatingFileHandler
-from tkinter import filedialog
 from dotenv import load_dotenv
 import config
 from typing import Dict, List, Optional, Tuple, Any, Callable, Set, Union, Literal, DefaultDict
 from datetime import datetime
 from collections import defaultdict
 import time
-import tkinter as tk
 from dataclasses import dataclass
 from enum import Enum, auto
 import subprocess
@@ -26,6 +24,22 @@ class OperationType(Enum):
     SCAN = auto()
     DELETE = auto()
     NONE = auto()
+
+# Define SelectionStrategy enum
+class SelectionStrategy(Enum):
+    """Strategy for selecting which duplicate to keep."""
+    NEWEST = "Keep newest file"
+    OLDEST = "Keep oldest file"
+    SHORTEST_PATH = "Keep file with shortest path"
+    LONGEST_PATH = "Keep file with longest path"
+
+# Strategy tooltips
+STRATEGY_TOOLTIPS = {
+    SelectionStrategy.NEWEST: "Keeps the most recently modified file in each group and selects older duplicates for deletion",
+    SelectionStrategy.OLDEST: "Keeps the oldest file in each group and selects newer duplicates for deletion",
+    SelectionStrategy.SHORTEST_PATH: "Keeps the file with the shortest path name and selects others for deletion",
+    SelectionStrategy.LONGEST_PATH: "Keeps the file with the longest path name and selects others for deletion"
+}
 
 # Define UIState enum and state management
 class UIState(Enum):
@@ -104,6 +118,7 @@ def init_session_state() -> None:
         st.session_state.last_scan_time = None
         st.session_state.error_message = None
         st.session_state.scan_dir = ""
+        st.session_state.selection_strategy = SelectionStrategy.NEWEST
         st.session_state.initialized = True
 
 # Initialize session state
@@ -459,11 +474,36 @@ def find_duplicates(directory: FilePath) -> None:
                     logger.warning(f"Skipping file due to error: {str(e)}")
                     continue
         
-        # Collect duplicate groups
-        st.session_state.duplicate_files = [
-            sorted(group) for group in files_by_hash.values() 
-            if len(group) > 1
-        ]
+        # Collect duplicate groups and sort based on selection strategy
+        duplicate_groups = []
+        for group in files_by_hash.values():
+            if len(group) > 1:
+                # Sort files based on selection strategy
+                if st.session_state.selection_strategy == SelectionStrategy.NEWEST:
+                    sorted_group = sorted(
+                        group,
+                        key=lambda f: FileOperations.get_file_info(f).modified,
+                        reverse=True
+                    )
+                elif st.session_state.selection_strategy == SelectionStrategy.OLDEST:
+                    sorted_group = sorted(
+                        group,
+                        key=lambda f: FileOperations.get_file_info(f).modified
+                    )
+                elif st.session_state.selection_strategy == SelectionStrategy.SHORTEST_PATH:
+                    sorted_group = sorted(
+                        group,
+                        key=lambda f: len(str(f))
+                    )
+                else:  # LONGEST_PATH
+                    sorted_group = sorted(
+                        group,
+                        key=lambda f: len(str(f)),
+                        reverse=True
+                    )
+                duplicate_groups.append(sorted_group)
+        
+        st.session_state.duplicate_files = duplicate_groups
             
     except Exception as e:
         logger.error(f"An error occurred while scanning: {str(e)}")
@@ -475,7 +515,21 @@ def find_duplicates(directory: FilePath) -> None:
         status_text.empty()
         
         if st.session_state.duplicate_files:
-            st.success(f"Found {len(st.session_state.duplicate_files)} groups of duplicate files!")
+            # Automatically select all files except the first one in each group
+            st.session_state.selected_files = set()
+            total_size = 0
+            for group in st.session_state.duplicate_files:
+                # Skip the first file (based on strategy) and select the rest
+                for file in group[1:]:
+                    if os.path.exists(file):
+                        st.session_state.selected_files.add(file)
+                        try:
+                            total_size += os.path.getsize(file)
+                        except (OSError, IOError):
+                            continue
+            
+            st.session_state.space_savings = total_size
+            st.success(f"Found {len(st.session_state.duplicate_files)} groups of duplicate files! Automatically selected all duplicates except the {st.session_state.selection_strategy.value.lower()} in each group.")
             set_ui_state(UIState.RESULTS)
         else:
             st.info("No duplicate files found.")
@@ -556,6 +610,50 @@ def select_directory() -> Optional[str]:
         logger.error(f"Error in directory selection: {e}")
         st.error("Failed to open folder selection dialog")
 
+def update_selections_based_on_strategy() -> None:
+    """Update file selections based on the current strategy."""
+    if not st.session_state.duplicate_files:
+        return
+        
+    st.session_state.selected_files = set()
+    total_size = 0
+    
+    for group in st.session_state.duplicate_files:
+        # Sort files based on current strategy
+        if st.session_state.selection_strategy == SelectionStrategy.NEWEST:
+            sorted_group = sorted(
+                group,
+                key=lambda f: FileOperations.get_file_info(f).modified,
+                reverse=True
+            )
+        elif st.session_state.selection_strategy == SelectionStrategy.OLDEST:
+            sorted_group = sorted(
+                group,
+                key=lambda f: FileOperations.get_file_info(f).modified
+            )
+        elif st.session_state.selection_strategy == SelectionStrategy.SHORTEST_PATH:
+            sorted_group = sorted(
+                group,
+                key=lambda f: len(str(f))
+            )
+        else:  # LONGEST_PATH
+            sorted_group = sorted(
+                group,
+                key=lambda f: len(str(f)),
+                reverse=True
+            )
+            
+        # Skip the first file (based on strategy) and select the rest
+        for file in sorted_group[1:]:
+            if os.path.exists(file):
+                st.session_state.selected_files.add(file)
+                try:
+                    total_size += os.path.getsize(file)
+                except (OSError, IOError):
+                    continue
+    
+    st.session_state.space_savings = total_size
+
 # Title and description
 st.title("Duplicate Files Cleanup Utility")
 
@@ -576,6 +674,18 @@ with st.sidebar:
     st.subheader("Scan Options")
     scan_hidden = st.checkbox("Scan hidden files", value=False)
     follow_symlinks = st.checkbox("Follow symbolic links", value=False)
+    
+    # Add selection strategy
+    st.subheader("Selection Strategy")
+    strategy = st.radio(
+        "Choose which file to keep in each duplicate group:",
+        options=[strategy.value for strategy in SelectionStrategy],
+        index=0,
+        key="strategy_radio",
+        help="Select a strategy to determine which file to keep in each group of duplicates"
+    )
+    st.session_state.selection_strategy = SelectionStrategy(strategy)
+    st.caption(STRATEGY_TOOLTIPS[st.session_state.selection_strategy])
 
 with tab1:
     # Main heading for the scan tab
@@ -644,6 +754,24 @@ with tab2:
         # Initialize selected files if not already done
         if not st.session_state.initialized:
             init_ui_state()
+            
+        # Add strategy selection in results tab
+        st.subheader("Selection Strategy")
+        strategy = st.radio(
+            "Choose which file to keep in each duplicate group:",
+            options=[strategy.value for strategy in SelectionStrategy],
+            index=list(SelectionStrategy).index(st.session_state.selection_strategy),
+            key="strategy_radio_results",
+            help="Select a strategy to determine which file to keep in each group of duplicates"
+        )
+        st.caption(STRATEGY_TOOLTIPS[SelectionStrategy(strategy)])
+        
+        # Update strategy and selections if changed
+        new_strategy = SelectionStrategy(strategy)
+        if new_strategy != st.session_state.selection_strategy:
+            st.session_state.selection_strategy = new_strategy
+            update_selections_based_on_strategy()
+            st.rerun()
             
         # Filter out non-existent files from selected files and recalculate space savings
         st.session_state.selected_files = {f for f in st.session_state.selected_files if os.path.exists(f)}
