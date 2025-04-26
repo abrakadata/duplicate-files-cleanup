@@ -34,108 +34,110 @@
             border-left: 4px solid #FF9800;
             margin: 10px 0;
         }
+        .strategy {
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-left: 4px solid #4CAF50;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <h1>Duplicate Files Cleanup Utility - Instructions</h1>
     
     <h2>Getting Started</h2>
-    <p>This utility helps you find and manage duplicate files in your system. It's powered by fclones, a high-performance duplicate file finder.</p>
+    <p>This utility helps you find and manage duplicate files in your system. It provides an intuitive web interface powered by Streamlit for easy duplicate file management.</p>
 
-    <h2>Installation</h2>
-    <h3>Windows</h3>
-    <ol>
-        <li>Install Rust (if not already installed):
-            <code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code>
-        </li>
-        <li>Install fclones:
-            <code>cargo install fclones</code>
-        </li>
-    </ol>
-
-    <h3>Linux</h3>
-    <code>cargo install fclones</code>
-
-    <h3>macOS</h3>
-    <code>brew install fclones</code>
-
-    <h2>Using the Interface</h2>
+    <h2>Using the Software</h2>
     
-    <h3>1. Select Directory</h3>
-    <p>Choose the directory you want to scan for duplicates. You can enter the path manually or use the file picker.</p>
-    
-    <h3>2. Configure Scan</h3>
+    <h3>1. Configuration (Sidebar)</h3>
     <ul>
-        <li><strong>Hashing Algorithm:</strong> Choose the algorithm for file comparison
+        <li><strong>Minimum file size:</strong> Set the smallest file size to consider (in KB)</li>
+        <li><strong>File types:</strong> Specify which file extensions to scan (e.g., .txt,.pdf)</li>
+        <li><strong>Exclude directories:</strong> List directories to skip during scan</li>
+        <li><strong>Scan Options:</strong>
             <ul>
-                <li><code>md5</code>: Fastest, good for general use</li>
-                <li><code>sha1</code>: More secure, slightly slower</li>
-                <li><code>sha256</code>: Most secure, slower</li>
-                <li><code>xxhash</code>: Extremely fast, less secure</li>
-                <li><code>blake3</code>: Fast and secure</li>
-            </ul>
-        </li>
-        <li><strong>Size Limits:</strong> Set minimum and maximum file sizes to scan
-            <ul>
-                <li>Use suffixes: K (kilobytes), M (megabytes), G (gigabytes)</li>
-                <li>Example: 1M, 100K, 1G</li>
-            </ul>
-        </li>
-        <li><strong>Threads:</strong> Number of parallel processing threads</li>
-    </ul>
-
-    <h3>3. Advanced Options</h3>
-    <ul>
-        <li><strong>Exclude Pattern:</strong> Skip files matching the pattern
-            <ul>
-                <li>Example: <code>*.git</code> to exclude Git directories</li>
-                <li>Example: <code>*.tmp</code> to exclude temporary files</li>
-            </ul>
-        </li>
-        <li><strong>Output Format:</strong> Choose how to view results
-            <ul>
-                <li><code>text</code>: Simple text output</li>
-                <li><code>json</code>: Structured JSON data</li>
-                <li><code>csv</code>: Tabular format for spreadsheet import</li>
+                <li>Scan hidden files: Include or exclude hidden files</li>
+                <li>Follow symbolic links: Choose whether to follow symlinks</li>
             </ul>
         </li>
     </ul>
 
-    <h3>4. Running the Scan</h3>
+    <h3>2. Selection Strategy</h3>
+    <div class="strategy">
+        <p>Choose which files to keep when duplicates are found:</p>
+        <ul>
+            <li><strong>Keep newest file:</strong> Preserves the most recently modified file in each group</li>
+            <li><strong>Keep oldest file:</strong> Preserves the earliest created file in each group</li>
+            <li><strong>Keep shortest path:</strong> Keeps the file with the shortest directory path</li>
+            <li><strong>Keep longest path:</strong> Keeps the file with the longest directory path</li>
+        </ul>
+        <p>The strategy can be changed at any time, even after scanning, to automatically update selections.</p>
+    </div>
+
+    <h3>3. Scanning Process</h3>
     <ol>
-        <li>Click "Start Scan" to begin</li>
-        <li>Wait for the scan to complete</li>
-        <li>Review the results in the "Results" tab</li>
+        <li>Click "Select folder" to choose the directory to scan</li>
+        <li>Review the selected directory path</li>
+        <li>Click "Start Scan" to begin the duplicate search</li>
+        <li>Wait for the scan to complete - progress will be shown</li>
     </ol>
+
+    <h3>4. Managing Results</h3>
+    <ul>
+        <li><strong>View Results:</strong> Switch to the "RESULTS" tab after scanning</li>
+        <li><strong>Group Information:</strong> Each group shows:
+            <ul>
+                <li>Number of duplicate files</li>
+                <li>File size</li>
+                <li>Modification dates</li>
+                <li>Full file paths</li>
+            </ul>
+        </li>
+        <li><strong>Selection Controls:</strong>
+            <ul>
+                <li>"Select All": Choose all duplicate files</li>
+                <li>"Select None": Clear all selections</li>
+                <li>Individual checkboxes: Manually select specific files</li>
+            </ul>
+        </li>
+        <li><strong>Deletion:</strong>
+            <ul>
+                <li>Review selected files carefully</li>
+                <li>Click "Delete Selected" to remove chosen duplicates</li>
+                <li>Confirm deletion when prompted</li>
+            </ul>
+        </li>
+    </ul>
 
     <div class="note">
-        <h3>Tips for Best Results</h3>
+        <h3>Tips for Effective Use</h3>
         <ul>
-            <li>Start with smaller directories to test the configuration</li>
-            <li>Use faster algorithms (md5 or xxhash) for initial scans</li>
-            <li>Adjust thread count based on your system's capabilities</li>
-            <li>Use size limits to focus on important files</li>
+            <li>Start with smaller directories to familiarize yourself with the interface</li>
+            <li>Use appropriate file type filters to focus on specific files</li>
+            <li>Review the space savings shown before deletion</li>
+            <li>Change the selection strategy to match your organization preferences</li>
         </ul>
     </div>
 
     <div class="warning">
-        <h3>Important Notes</h3>
+        <h3>Important Notes about Cloud Storage</h3>
         <ul>
-            <li>Always review results before taking any action</li>
-            <li>System directories are protected by default</li>
-            <li>Large scans may take significant time and resources</li>
-            <li>Keep backups of important files</li>
+            <li>Files must be downloaded locally before scanning</li>
+            <li>Deleting files from cloud storage folders affects both local and cloud copies</li>
+            <li>Changes will sync across all connected devices</li>
+            <li>Consider moving files to a local folder before deletion to prevent unintended synchronization</li>
         </ul>
     </div>
 
     <h2>Troubleshooting</h2>
     <ul>
-        <li><strong>Scan fails:</strong> Check if fclones is properly installed</li>
-        <li><strong>Permission errors:</strong> Run with appropriate permissions</li>
-        <li><strong>Memory issues:</strong> Reduce thread count or scan size</li>
+        <li><strong>No duplicates found:</strong> Check file type filters and minimum size settings</li>
+        <li><strong>Scan takes too long:</strong> Try scanning smaller directories or using more specific file types</li>
+        <li><strong>Permission errors:</strong> Ensure you have access to all directories being scanned</li>
     </ul>
 
     <h2>Need Help?</h2>
-    <p>For more information about fclones, visit the <a href="https://github.com/pkolaczk/fclones">GitHub repository</a>.</p>
+    <p>If you encounter any issues or have questions, please check the project's documentation or raise an issue on the repository.</p>
 </body>
 </html> 
